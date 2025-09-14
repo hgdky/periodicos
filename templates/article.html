@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}{{ article.title }}{% endblock %}
+{% block content %}
+<div class="layout">
+<aside class="left">
+<h3>Últimas (carrusel)</h3>
+<div class="vertical-list">
+<!-- En este build simple no generamos un carrusel JS, solo lista vertical -->
+<ul>
+<li><a href="#">Noticia ejemplo 1</a></li>
+<li><a href="#">Noticia ejemplo 2</a></li>
+<li><a href="#">Noticia ejemplo 3</a></li>
+</ul>
+</div>
+</aside>
+
+
+<main class="right">
+<h1>{{ article.title }}</h1>
+<p class="meta">{{ article.category }} | {{ article.date }} | {{ article.site }}</p>
+{% if article.image %}
+<img src="{{ article.image }}" alt="imagen" />
+{% endif %}
+<div class="content">
+{{ article.content | replace('\n', '<p>') | safe }}
+</div>
+<p><a href="{{ article.url }}" target="_blank">Fuente original</a></p>
+</main>
+</div>
+{% endblock %}
