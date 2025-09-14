@@ -34,6 +34,13 @@ jobs:
           python scraper.py --out data.json
           python generator.py --data data.json --out _site
 
+      - name: Debug - list root and _site
+        run: |
+          echo "== Root =="
+          ls -R
+          echo "== _site =="
+          ls -R _site || echo "_site no existe"
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
