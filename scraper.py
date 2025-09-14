@@ -4,6 +4,7 @@ import time
 from urllib.parse import urlparse, urljoin
 import requests
 from bs4 import BeautifulSoup
+
 # ---- Configuración de sitios ----
 SITES = {
     "rpp": {
@@ -32,18 +33,31 @@ SITES = {
     }
 }
 
-
 """scraper.py"""
+
+def fetch(url):
+    r = requests.get(url, timeout=10)
+    r.raise_for_status()
+    return r.text
+
+def extract_links(html):
+    soup = BeautifulSoup(html, "html.parser")
+    links = []
+    for a in soup.find_all("a", href=True):
+        links.append(a["href"])
+    return links
+
+def get_article_meta(html, base):
+    soup = BeautifulSoup(html, "html.parser")
+    title = soup.title.string.strip() if soup.title else "Sin título"
+    return {"title": title}
 
 def scrape_site(base, category_path, max_articles=50):
     links = []
-
-    # recolectar enlaces (ejemplo, deberás adaptar fetch y urljoin)
     html = fetch(base + category_path)
     for href in extract_links(html):
         links.append(urljoin(base, href))
 
-    # normalizar y deduplicar
     seen = set()
     out_links = []
     for l in links:
@@ -64,11 +78,9 @@ def scrape_site(base, category_path, max_articles=50):
             articles.append(meta)
             time.sleep(0.5)
         except Exception:
-            # saltar errores individuales
             continue
 
     return articles
-
 
 def main():
     parser = argparse.ArgumentParser()
@@ -88,9 +100,11 @@ def main():
             except Exception:
                 continue
 
+    # Debug de cantidad de artículos
+    print("Artículos encontrados:", len(result))
+
     with open(args.out, 'w', encoding='utf-8') as f:
         json.dump(result, f, ensure_ascii=False, indent=2)
-
 
 if __name__ == '__main__':
     main()
