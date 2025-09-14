@@ -1,0 +1,4 @@
+body{font-family:system-ui, -apple-system, Roboto, 'Segoe UI', 'Helvetica Neue', Arial; margin:12px}
+.container{max-width:1100px;margin:0 auto}
+.grid{display:flex;gap:12px}
+.card{border:1px solid #ddd;padding:8px;border-radius:8px;fl
