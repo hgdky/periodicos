@@ -4,6 +4,34 @@ import time
 from urllib.parse import urlparse, urljoin
 import requests
 from bs4 import BeautifulSoup
+# ---- Configuración de sitios ----
+SITES = {
+    "rpp": {
+        "base": "https://rpp.pe",
+        "categories": {
+            "politica": "/politica",
+            "actualidad": "/actualidad",
+            "deportes": "/deportes"
+        }
+    },
+    "exitosa": {
+        "base": "https://www.exitosanoticias.pe",
+        "categories": {
+            "actualidad": "/actualidad",
+            "politica": "/politica",
+            "mundo": "/mundo"
+        }
+    },
+    "peru21": {
+        "base": "https://peru21.pe",
+        "categories": {
+            "politica": "/politica",
+            "economia": "/economia",
+            "deportes": "/deportes"
+        }
+    }
+}
+
 
 """scraper.py"""
 
