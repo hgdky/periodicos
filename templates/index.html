@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Inicio - Periódicos{% endblock %}
+{% block content %}
+<h1>Periódicos agregados</h1>
+<div class="grid">
+{% for source, items in sources.items() %}
+<div class="card">
+<h2>{{ source }}</h2>
+<a href="{{ items|first.url if items|length > 0 else '#' }}">Ver noticias</a>
+<ul>
+{% for art in items[:5] %}
+<li><a href="/article-{{ loop.index0 + loop.parent.loop.index0*100 }}.html">{{ art.title }}</a></li>
+{% endfor %}
+</ul>
+</div>
+{% endfor %}
+</div>
+{% endblock %}
