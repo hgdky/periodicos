@@ -1,33 +1,38 @@
 """scraper.py"""
 
-links.append(urljoin(base, href))
+def scrape_site(base, category_path, max_articles=50):
+    links = []
 
-# normalizar y deduplicar
-seen = set()
-out_links = []
-for l in links:
-    p = urlparse(l)
+    # recolectar enlaces (ejemplo, deberás adaptar fetch y urljoin)
+    html = fetch(base + category_path)
+    for href in extract_links(html):
+        links.append(urljoin(base, href))
 
-    clean = p.scheme + '://' + p.netloc + p.path
-    if clean not in seen:
-        seen.add(clean)
-        out_links.append(clean)
-    if len(out_links) >= max_articles:
-        break
+    # normalizar y deduplicar
+    seen = set()
+    out_links = []
+    for l in links:
+        p = urlparse(l)
+        clean = p.scheme + '://' + p.netloc + p.path
+        if clean not in seen:
+            seen.add(clean)
+            out_links.append(clean)
+        if len(out_links) >= max_articles:
+            break
 
-articles = []
-for link in out_links:
-    try:
-        art_html = fetch(link)
-        meta = get_article_meta(art_html, base)
-        meta.update({'url': link, 'site': base})
-        articles.append(meta)
-        time.sleep(0.5)
-    except Exception as e:
-        # saltar errores individuales
-        continue
+    articles = []
+    for link in out_links:
+        try:
+            art_html = fetch(link)
+            meta = get_article_meta(art_html, base)
+            meta.update({'url': link, 'site': base})
+            articles.append(meta)
+            time.sleep(0.5)
+        except Exception:
+            # saltar errores individuales
+            continue
 
-return articles
+    return articles
 
 
 def main():
@@ -45,7 +50,7 @@ def main():
                     a['category'] = cat_name
                     a['source'] = site_key
                     result.append(a)
-            except Exception as e:
+            except Exception:
                 continue
 
     with open(args.out, 'w', encoding='utf-8') as f:
